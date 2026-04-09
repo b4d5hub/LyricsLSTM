@@ -1,0 +1,10 @@
+flask
+flask-mysqldb
+numpy
+tensorflow
+keras
+scikit-learn
+pandas
+matplotlib
+werkzeug
+pickleshare
