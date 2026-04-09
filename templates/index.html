@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Lyricist AI - Taylor Swift Lyrics Generator</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;family=Playfair+Display:ital,wght@1,400;1,600&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#1a1f2c",
+                        "on-primary-fixed-variant": "#5d002b",
+                        "surface-variant": "#202633",
+                        "secondary": "#bd82ff",
+                        "on-surface-variant": "#a7abb7",
+                        "on-error-container": "#ffb2b9",
+                        "tertiary-dim": "#f3778a",
+                        "surface": "#0a0e17",
+                        "surface-container-highest": "#202633",
+                        "surface-bright": "#262c3a",
+                        "on-tertiary-fixed-variant": "#71122a",
+                        "on-tertiary-fixed": "#39000f",
+                        "on-secondary": "#31005d",
+                        "on-tertiary": "#680924",
+                        "outline-variant": "#444852",
+                        "on-secondary-fixed": "#4d008c",
+                        "on-tertiary-container": "#57001a",
+                        "surface-container": "#151925",
+                        "primary-dim": "#e30071",
+                        "on-secondary-fixed-variant": "#711bc2",
+                        "tertiary": "#ff94a3",
+                        "error-container": "#a70138",
+                        "primary": "#ff89ac",
+                        "primary-container": "#ff709e",
+                        "surface-tint": "#ff89ac",
+                        "tertiary-fixed-dim": "#fa7c8f",
+                        "secondary-fixed-dim": "#d9b5ff",
+                        "inverse-surface": "#faf9ff",
+                        "on-error": "#490013",
+                        "error": "#ff6e84",
+                        "secondary-dim": "#974ce9",
+                        "on-secondary-container": "#e4c9ff",
+                        "surface-container-low": "#0f131d",
+                        "background": "#0a0e17",
+                        "error-dim": "#d73357",
+                        "primary-fixed": "#ff709e",
+                        "secondary-fixed": "#e3c6ff",
+                        "on-primary-fixed": "#000000",
+                        "inverse-on-surface": "#515560",
+                        "tertiary-container": "#fd7e92",
+                        "secondary-container": "#6807ba",
+                        "outline": "#727581",
+                        "primary-fixed-dim": "#ff5191",
+                        "inverse-primary": "#bc005c",
+                        "on-background": "#ebedfb",
+                        "tertiary-fixed": "#ff909f",
+                        "on-primary-container": "#4c0022",
+                        "surface-container-lowest": "#000000",
+                        "on-surface": "#ebedfb",
+                        "on-primary": "#62002d",
+                        "surface-dim": "#0a0e17"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "1rem",
+                        "2xl": "1.5rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "poetry": ["Playfair Display", "serif"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(32, 38, 51, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glow-hover:hover {
+            box-shadow: 0 0 20px 2px rgba(255, 137, 172, 0.15);
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 18px;
+            width: 18px;
+            border-radius: 50%;
+            background: #ff89ac;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 137, 172, 0.8);
+            margin-top: -6px;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            height: 6px;
+            background: rgba(68, 72, 82, 0.3);
+            border-radius: 3px;
+        }
+
+        .lyrics-pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-surface font-body min-h-screen flex flex-col selection:bg-primary/30">
+    <!-- TopNavBar -->
+    <nav class="fixed top-0 w-full z-50 bg-slate-950/60 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(0,0,0,0.4)]">
+        <div class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto relative">
+            <div
+                class="text-2xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent font-['Space_Grotesk'] tracking-tight">
+                Lyricist AI
+            </div>
+            <div class="hidden md:flex items-center gap-8">
+                <a class="text-purple-400 font-bold border-b-2 border-purple-500 pb-1 font-['Space_Grotesk']"
+                    href="#">Studio</a>
+                <a class="text-slate-400 hover:text-slate-100 transition-colors font-['Space_Grotesk']"
+                    href="#">Archive</a>
+                <a class="text-slate-400 hover:text-slate-100 transition-colors font-['Space_Grotesk']"
+                    href="#">Library</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <button
+                    class="p-2 text-slate-400 hover:bg-white/5 transition-all duration-300 rounded-full scale-95 active:scale-90">
+                    <span class="material-symbols-outlined" data-icon="settings">settings</span>
+                </button>
+                <button
+                    class="p-2 text-slate-400 hover:bg-white/5 transition-all duration-300 rounded-full scale-95 active:scale-90">
+                    <span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+                </button>
+            </div>
+            <div
+                class="bg-gradient-to-r from-transparent via-purple-500/20 to-transparent h-[1px] w-full absolute bottom-0 left-0">
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow pt-32 pb-20 px-4 md:px-8 max-w-6xl mx-auto w-full space-y-12">
+        <!-- Hero Header -->
+        <header class="text-center space-y-4">
+            <h1
+                class="text-4xl md:text-6xl font-headline font-bold bg-gradient-to-b from-on-surface to-on-surface-variant bg-clip-text text-transparent">
+                Taylor Swift Lyrics Generator
+            </h1>
+            <p class="text-secondary font-headline tracking-widest text-sm md:text-base uppercase opacity-80">
+                Powered by LSTM Deep Learning
+            </p>
+        </header>
+
+        <!-- Generation Engine Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <!-- Controls Sidebar (5 cols) -->
+            <aside class="lg:col-span-5 space-y-6">
+                <div class="glass-panel p-8 rounded-2xl space-y-8">
+                    <div class="space-y-4">
+                        <label
+                            class="text-xs font-headline font-medium text-on-surface-variant uppercase tracking-widest block">Input
+                            Seed</label>
+                        <div class="relative group">
+                            <span
+                                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline"
+                                data-icon="edit_note">edit_note</span>
+                            <input id="seed"
+                                class="w-full bg-surface-container-highest border-none rounded-xl py-4 pl-12 pr-4 focus:ring-2 focus:ring-primary/50 text-on-surface placeholder:text-outline transition-all"
+                                placeholder="Enter a starting phrase..." type="text" value="i knew you were trouble" />
+                        </div>
+                        <div class="flex flex-wrap gap-2 pt-2">
+                            <button onclick="setSeed('i knew you were trouble')"
+                                class="px-3 py-1.5 rounded-full bg-secondary-container/30 text-on-secondary-container text-xs font-medium hover:bg-secondary-container/50 transition-colors">I
+                                Knew You Were Trouble</button>
+                            <button onclick="setSeed('shake it off')"
+                                class="px-3 py-1.5 rounded-full bg-secondary-container/30 text-on-secondary-container text-xs font-medium hover:bg-secondary-container/50 transition-colors">Shake
+                                It Off</button>
+                            <button onclick="setSeed('you belong with me')"
+                                class="px-3 py-1.5 rounded-full bg-secondary-container/30 text-on-secondary-container text-xs font-medium hover:bg-secondary-container/50 transition-colors">You
+                                Belong With Me</button>
+                            <button onclick="setSeed('love story')"
+                                class="px-3 py-1.5 rounded-full bg-secondary-container/30 text-on-secondary-container text-xs font-medium hover:bg-secondary-container/50 transition-colors">Love
+                                Story</button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <label
+                                    class="text-xs font-headline font-medium text-on-surface-variant uppercase tracking-widest">Number
+                                    of Words</label>
+                                <span id="words-val" class="text-primary font-bold">25</span>
+                            </div>
+                            <input id="words" class="w-full appearance-none bg-transparent" max="100" min="10"
+                                type="range" value="25" oninput="updateVal('words-val', this.value)" />
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <label
+                                    class="text-xs font-headline font-medium text-on-surface-variant uppercase tracking-widest">Temperature</label>
+                                <span id="temp-val" class="text-primary font-bold">0.8</span>
+                            </div>
+                            <input id="temperature" class="w-full appearance-none bg-transparent" max="1.5" min="0.3"
+                                step="0.1" type="range" value="0.8"
+                                oninput="updateVal('temp-val', parseFloat(this.value).toFixed(1))" />
+                        </div>
+                    </div>
+
+                    <button id="genBtn" onclick="generate()"
+                        class="w-full py-5 rounded-2xl bg-gradient-to-r from-primary to-secondary text-on-primary-fixed font-headline font-bold text-lg shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex justify-center items-center gap-3">
+                        <span id="genBtnIcon" class="material-symbols-outlined"
+                            data-icon="auto_awesome">auto_awesome</span>
+                        <span id="genBtnText">Generate Lyrics</span>
+                    </button>
+                </div>
+
+            </aside>
+
+            <!-- Results Section (7 cols) -->
+            <section class="lg:col-span-7 space-y-6">
+                <div class="glass-panel p-6 md:p-10 rounded-2xl min-h-[500px] flex flex-col">
+                    <div class="flex justify-between items-center mb-8 px-4">
+                        <div class="flex gap-2">
+                            <span
+                                class="px-3 py-1 rounded-full bg-surface-variant text-[10px] text-on-surface-variant uppercase tracking-widest border border-white/5">Model:
+                                LSTM-v2</span>
+                            <span id="badge-temp"
+                                class="px-3 py-1 rounded-full bg-surface-variant text-[10px] text-on-surface-variant uppercase tracking-widest border border-white/5">Temp:
+                                0.8</span>
+                        </div>
+                        <button onclick="copyLyrics()"
+                            class="flex items-center gap-2 text-primary hover:text-primary-container transition-colors font-headline text-sm font-medium">
+                            <span id="copyIcon" class="material-symbols-outlined text-base"
+                                data-icon="content_copy">content_copy</span>
+                            <span id="copyText">Copy to Clipboard</span>
+                        </button>
+                    </div>
+
+                    <div id="resultArea"
+                        class="flex-grow flex flex-col justify-center items-center text-center px-4 md:px-12 py-8">
+                        <div id="lyrics-text"
+                            class="space-y-6 text-xl md:text-3xl font-poetry italic text-on-surface leading-relaxed opacity-90 lyrics-pre">
+                            Enter a seed and press generate to see the magic happen...
+                        </div>
+                        <div class="mt-12 h-[2px] w-24 bg-gradient-to-r from-transparent via-primary/30 to-transparent">
+                        </div>
+                    </div>
+
+                    <div class="mt-auto pt-8 flex justify-center">
+                        <div
+                            class="flex items-center gap-1.5 text-on-surface-variant text-xs uppercase tracking-tighter">
+                            <span class="material-symbols-outlined text-sm" data-icon="history_edu">history_edu</span>
+                            Drafted by The Neon Lyricist
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer Stats -->
+    <footer class="w-full py-8 mt-auto bg-[#0a0e17] border-t border-white/5">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center px-8 gap-6">
+            <div class="text-on-surface-variant font-['Inter'] text-[10px] tracking-widest uppercase opacity-60">
+                © 2024 Ethereal Synthetic AI. Built for the Neon Lyricist.
+            </div>
+            <div class="flex flex-wrap justify-center gap-x-8 gap-y-2">
+                <div class="flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(255,137,172,0.8)]"></span>
+                    <span class="text-slate-500 font-['Inter'] text-xs tracking-widest uppercase">Dataset: 4.8k
+                        lines</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-secondary shadow-[0_0_8px_rgba(189,130,255,0.8)]"></span>
+                    <span class="text-slate-500 font-['Inter'] text-xs tracking-widest uppercase">Vocab: 2.3k
+                        words</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-tertiary shadow-[0_0_8px_rgba(255,148,163,0.8)]"></span>
+                    <span class="text-slate-500 font-['Inter'] text-xs tracking-widest uppercase">Accuracy: 39.2%</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.4)]"></span>
+                    <span class="text-slate-500 font-['Inter'] text-xs tracking-widest uppercase">Epochs: 50</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        function updateVal(id, val) {
+            document.getElementById(id).textContent = val;
+        }
+
+        function setSeed(text) {
+            document.getElementById('seed').value = text;
+        }
+
+        function copyLyrics() {
+            const text = document.getElementById('lyrics-text').textContent.trim();
+            if (!text || text.includes("Enter a seed")) return;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const btnText = document.getElementById('copyText');
+                const btnIcon = document.getElementById('copyIcon');
+                btnText.textContent = 'Copied!';
+                btnIcon.textContent = 'check';
+                setTimeout(() => {
+                    btnText.textContent = 'Copy to Clipboard';
+                    btnIcon.textContent = 'content_copy';
+                }, 2000);
+            });
+        }
+
+        async function generate() {
+            const seed = document.getElementById('seed').value.trim();
+            const words = document.getElementById('words').value;
+            const temp = document.getElementById('temperature').value;
+
+            if (!seed) {
+                alert('Please enter a seed text!');
+                return;
+            }
+
+            const btn = document.getElementById('genBtn');
+            const btnText = document.getElementById('genBtnText');
+            const btnIcon = document.getElementById('genBtnIcon');
+            const resultArea = document.getElementById('lyrics-text');
+            const badgeTemp = document.getElementById('badge-temp');
+
+            btn.disabled = true;
+            btnText.textContent = 'Generating...';
+            btnIcon.textContent = 'hourglass_empty';
+            btnIcon.classList.add('animate-spin');
+
+            resultArea.innerHTML = '<div class="flex flex-col items-center gap-4"><div class="dot-loader flex gap-2"><div class="w-3 h-3 rounded-full bg-primary animate-bounce"></div><div class="w-3 h-3 rounded-full bg-secondary animate-bounce [animation-delay:0.2s]"></div><div class="w-3 h-3 rounded-full bg-tertiary animate-bounce [animation-delay:0.4s]"></div></div><p class="text-sm font-headline tracking-widest uppercase opacity-60">Consulting the deep learning oracle...</p></div>';
+
+            try {
+                const response = await fetch('/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ seed, words, temperature: temp })
+                });
+
+                const data = await response.json();
+
+                // Format lyrics to have line breaks if it's too long or has natural breaks
+                resultArea.textContent = data.lyrics;
+                badgeTemp.textContent = 'Temp: ' + parseFloat(temp).toFixed(1);
+
+            } catch (err) {
+                console.error(err);
+                resultArea.textContent = 'Error connecting to the model. Is app.py running?';
+            } finally {
+                btn.disabled = false;
+                btnText.textContent = 'Generate Lyrics';
+                btnIcon.textContent = 'auto_awesome';
+                btnIcon.classList.remove('animate-spin');
+            }
+        }
+    </script>
+</body>
+
+</html>
