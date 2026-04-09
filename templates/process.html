@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Process — Lyricist AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+    <script>tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ff89ac","secondary":"#bd82ff","tertiary":"#ff94a3","background":"#0a0e17","on-surface":"#ebedfb","on-surface-variant":"#a7abb7","outline-variant":"#444852"},fontFamily:{headline:["Space Grotesk"],body:["Inter"]}}}}</script>
+    <style>
+        *{box-sizing:border-box}
+        body{background:#0a0e17;color:#ebedfb;font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+        .mesh{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 70% 50% at 30% 20%,rgba(189,130,255,.12) 0%,transparent 60%),radial-gradient(ellipse 50% 50% at 80% 80%,rgba(255,137,172,.08) 0%,transparent 60%)}
+        .glass{background:rgba(21,25,37,.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.05)}
+        .nav-link{font-family:'Space Grotesk',sans-serif;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;transition:color .2s}
+        .nav-link:hover{color:#ebedfb}
+        .section-tag{display:inline-flex;align-items:center;gap:.5rem;padding:.4rem 1rem;background:rgba(255,137,172,.08);border:1px solid rgba(255,137,172,.2);border-radius:9999px;font-size:.7rem;font-family:'Space Grotesk',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:#ff89ac}
+        /* Step Cards */
+        .step-wrapper{position:relative;display:flex;gap:2rem}
+        .step-spine{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+        .step-number{width:3.5rem;height:3.5rem;border-radius:1rem;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.1rem;flex-shrink:0;position:relative;z-index:1;border:1px solid rgba(255,255,255,.08)}
+        .step-connector{flex:1;width:1px;margin:0.5rem 0;min-height:2rem}
+        .step-body{flex:1;padding-bottom:3rem}
+        .step-card{border-radius:1.5rem;padding:2rem;border:1px solid rgba(255,255,255,.06);background:rgba(21,25,37,.6);backdrop-filter:blur(12px);transition:all .3s ease;cursor:default}
+        .step-card:hover{border-color:rgba(255,255,255,.12);transform:translateX(6px)}
+        .step-icon-wrap{width:2.5rem;height:2.5rem;border-radius:.75rem;display:flex;align-items:center;justify-content:center;margin-bottom:1rem}
+        .chip{display:inline-block;padding:.25rem .75rem;border-radius:9999px;font-size:.7rem;font-family:'Space Grotesk',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-right:.5rem;margin-top:.75rem}
+    </style>
+</head>
+<body>
+    <div class="mesh"></div>
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 w-full z-50 glass border-b border-white/5">
+        <div class="flex justify-between items-center max-w-7xl mx-auto px-6 h-16">
+            <a href="/" class="font-['Space_Grotesk'] text-xl font-bold" style="background:linear-gradient(135deg,#bd82ff,#ff89ac);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Lyricist AI</a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="/technology" class="nav-link text-on-surface-variant">Technology</a>
+                <a href="/process" class="nav-link text-primary border-b border-primary pb-0.5">Process</a>
+                <a href="/pricing" class="nav-link text-on-surface-variant">Pricing</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="/login" class="nav-link text-on-surface-variant">Login</a>
+                <a href="/register" class="px-4 py-2 rounded-lg text-sm font-semibold font-['Space_Grotesk']" style="background:linear-gradient(135deg,#6807ba,#ff89ac)">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 pt-28 pb-24 px-6">
+        <div class="max-w-3xl mx-auto">
+
+            <!-- Header -->
+            <div class="text-center mb-20 space-y-6">
+                <div class="section-tag mx-auto">
+                    <span class="material-symbols-outlined text-sm">route</span>
+                    Creative Pipeline
+                </div>
+                <h1 class="font-['Space_Grotesk'] text-5xl md:text-6xl font-bold tracking-tight leading-tight">
+                    How <span style="background:linear-gradient(135deg,#ff89ac,#bd82ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent">lyrics</span><br/>come to life
+                </h1>
+                <p class="text-on-surface-variant max-w-xl mx-auto leading-relaxed">From raw text data to a synthetic verse — here's every step our engine takes to generate your next hit.</p>
+            </div>
+
+            <!-- Steps Timeline -->
+            <div class="space-y-0">
+
+                <!-- Step 01 -->
+                <div class="step-wrapper">
+                    <div class="step-spine">
+                        <div class="step-number" style="background:rgba(189,130,255,.12);color:#bd82ff">01</div>
+                        <div class="step-connector" style="background:linear-gradient(to bottom,rgba(189,130,255,.4),rgba(255,137,172,.2))"></div>
+                    </div>
+                    <div class="step-body">
+                        <div class="step-card">
+                            <div class="step-icon-wrap" style="background:rgba(189,130,255,.1)">
+                                <span class="material-symbols-outlined text-secondary text-xl">database</span>
+                            </div>
+                            <h3 class="font-['Space_Grotesk'] text-xl font-bold mb-2">Data Curation</h3>
+                            <p class="text-on-surface-variant leading-relaxed text-sm">We gather and clean thousands of lines of authentic lyrics from Taylor Swift's discography — 94 songs, 4,862 lines, fully sanitized of metadata, HTML artifacts, and non-lyrical content.</p>
+                            <div>
+                                <span class="chip" style="background:rgba(189,130,255,.1);color:#bd82ff">CSV dataset</span>
+                                <span class="chip" style="background:rgba(189,130,255,.1);color:#bd82ff">Pandas</span>
+                                <span class="chip" style="background:rgba(189,130,255,.1);color:#bd82ff">4,862 lines</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 02 -->
+                <div class="step-wrapper">
+                    <div class="step-spine">
+                        <div class="step-number" style="background:rgba(255,137,172,.12);color:#ff89ac">02</div>
+                        <div class="step-connector" style="background:linear-gradient(to bottom,rgba(255,137,172,.3),rgba(255,148,163,.2))"></div>
+                    </div>
+                    <div class="step-body">
+                        <div class="step-card">
+                            <div class="step-icon-wrap" style="background:rgba(255,137,172,.1)">
+                                <span class="material-symbols-outlined text-primary text-xl">token</span>
+                            </div>
+                            <h3 class="font-['Space_Grotesk'] text-xl font-bold mb-2">Tokenization</h3>
+                            <p class="text-on-surface-variant leading-relaxed text-sm">Every word in the corpus is mapped to a unique integer by the Keras Tokenizer. This creates a 2,381-word vocabulary and converts every lyric line into a numerical sequence the model can learn from.</p>
+                            <div>
+                                <span class="chip" style="background:rgba(255,137,172,.1);color:#ff89ac">Keras Tokenizer</span>
+                                <span class="chip" style="background:rgba(255,137,172,.1);color:#ff89ac">tokenizer.pkl</span>
+                                <span class="chip" style="background:rgba(255,137,172,.1);color:#ff89ac">2,381 vocab</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 03 -->
+                <div class="step-wrapper">
+                    <div class="step-spine">
+                        <div class="step-number" style="background:rgba(255,148,163,.12);color:#ff94a3">03</div>
+                        <div class="step-connector" style="background:linear-gradient(to bottom,rgba(255,148,163,.3),rgba(255,137,172,.1))"></div>
+                    </div>
+                    <div class="step-body">
+                        <div class="step-card">
+                            <div class="step-icon-wrap" style="background:rgba(255,148,163,.1)">
+                                <span class="material-symbols-outlined text-tertiary text-xl">model_training</span>
+                            </div>
+                            <h3 class="font-['Space_Grotesk'] text-xl font-bold mb-2">LSTM Training</h3>
+                            <p class="text-on-surface-variant leading-relaxed text-sm">The model ingests sequences of 19 tokens and learns to predict the 20th. Over 50 epochs, the LSTM adjusts its 250 hidden units to minimize categorical cross-entropy and capture Taylor's lyrical rhythm.</p>
+                            <div>
+                                <span class="chip" style="background:rgba(255,148,163,.1);color:#ff94a3">50 epochs</span>
+                                <span class="chip" style="background:rgba(255,148,163,.1);color:#ff94a3">Adam optimizer</span>
+                                <span class="chip" style="background:rgba(255,148,163,.1);color:#ff94a3">Seq length = 20</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 04 (last — no connector) -->
+                <div class="step-wrapper">
+                    <div class="step-spine">
+                        <div class="step-number" style="background:rgba(235,237,251,.06);color:#ebedfb">04</div>
+                    </div>
+                    <div class="step-body">
+                        <div class="step-card" style="border-color:rgba(255,137,172,.15);background:rgba(255,137,172,.04)">
+                            <div class="step-icon-wrap" style="background:rgba(255,137,172,.1)">
+                                <span class="material-symbols-outlined text-primary text-xl">auto_awesome</span>
+                            </div>
+                            <h3 class="font-['Space_Grotesk'] text-xl font-bold mb-2">Lyric Generation</h3>
+                            <p class="text-on-surface-variant leading-relaxed text-sm">You enter a seed phrase. The model tokenizes it, pads the sequence, and runs a forward pass to produce a probability distribution over the vocabulary. Temperature controls the randomness. Word by word, your verse emerges.</p>
+                            <div>
+                                <span class="chip" style="background:rgba(255,137,172,.1);color:#ff89ac">Temperature sampling</span>
+                                <span class="chip" style="background:rgba(255,137,172,.1);color:#ff89ac">Seed → Verse</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="text-center mt-16">
+                <a href="/register" class="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-['Space_Grotesk'] font-bold text-sm" style="background:linear-gradient(135deg,#6807ba,#ff89ac);box-shadow:0 8px 30px rgba(255,137,172,.25)">
+                    Try the Generator
+                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="relative z-10 py-8 border-t border-white/5 text-center text-on-surface-variant text-xs">
+        © 2026 Lyricist AI · <a href="/technology" class="hover:text-secondary transition-colors">Technology</a> · <a href="/pricing" class="hover:text-primary transition-colors">Pricing</a>
+    </footer>
+</body>
+</html>

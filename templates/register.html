@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Create Account — Lyricist AI</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+    <script>tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ff89ac","secondary":"#bd82ff","tertiary":"#ff94a3","background":"#0a0e17","on-surface":"#ebedfb","on-surface-variant":"#a7abb7","surface-container-highest":"#202633","outline-variant":"#444852","secondary-container":"#6807ba","error":"#ff6e84"},fontFamily:{headline:["Space Grotesk"],body:["Inter"]}}}}</script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{min-height:100vh;background:#0a0e17;color:#ebedfb;font-family:'Inter',sans-serif;display:flex;flex-direction:column;overflow-x:hidden}
+        .mesh-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 70% 60% at 80% 20%,rgba(121,40,202,.2) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 10% 80%,rgba(255,0,128,.12) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 50% 50%,rgba(255,137,172,.05) 0%,transparent 60%)}
+        .glass{background:rgba(26,31,44,.75);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.06)}
+        .glow-ring{box-shadow:0 0 0 1px rgba(255,137,172,.12),0 20px 60px rgba(255,0,128,.15),0 4px 24px rgba(0,0,0,.4)}
+        .input-field{width:100%;background:rgba(32,38,51,.6);border:1px solid rgba(68,72,82,.4);border-radius:.75rem;padding:1rem 1rem 1rem 3rem;color:#ebedfb;font-family:'Inter',sans-serif;font-size:.9rem;outline:none;transition:all .2s ease}
+        .input-field::placeholder{color:#727581}
+        .input-field:focus{border-color:rgba(255,137,172,.5);background:rgba(32,38,51,.9);box-shadow:0 0 0 3px rgba(255,137,172,.1)}
+        .input-icon{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:#444852;font-size:1.2rem;pointer-events:none;transition:color .2s ease}
+        .input-wrap:focus-within .input-icon{color:#ff89ac}
+        .btn-primary{width:100%;padding:1rem;border-radius:.75rem;border:none;background:linear-gradient(135deg,#ff89ac,#6807ba);color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;letter-spacing:.05em;cursor:pointer;transition:all .3s ease;position:relative;overflow:hidden}
+        .btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.1),transparent);opacity:0;transition:opacity .3s}
+        .btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 32px rgba(255,137,172,.35)}
+        .btn-primary:hover::before{opacity:1}
+        .btn-primary:active{transform:translateY(0)}
+        .btn-social{flex:1;padding:.85rem;background:rgba(32,38,51,.5);border:1px solid rgba(68,72,82,.3);border-radius:.75rem;color:#a7abb7;font-family:'Inter',sans-serif;font-size:.85rem;cursor:pointer;transition:all .2s ease;display:flex;align-items:center;justify-content:center;gap:.6rem}
+        .btn-social:hover{background:rgba(32,38,51,.9);border-color:rgba(255,137,172,.3);color:#ebedfb}
+        .divider{display:flex;align-items:center;gap:1rem;color:#444852;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase}
+        .divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(68,72,82,.4)}
+        .brand-glow{background:linear-gradient(135deg,#ff89ac,#bd82ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .flash-error{background:rgba(167,1,56,.15);border:1px solid rgba(255,110,132,.25);color:#ff6e84;border-radius:.75rem;padding:.85rem 1rem;font-size:.85rem;display:flex;align-items:center;gap:.6rem}
+        .flash-success{background:rgba(68,202,106,.1);border:1px solid rgba(68,202,106,.25);color:#5ce491;border-radius:.75rem;padding:.85rem 1rem;font-size:.85rem;display:flex;align-items:center;gap:.6rem}
+        .label{font-family:'Inter',sans-serif;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#727581;display:block;margin-bottom:.5rem}
+        @keyframes floatA{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-14px) rotate(3deg)}}
+        @keyframes floatB{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-10px) rotate(-2deg)}}
+        .orb-a{animation:floatA 7s ease-in-out infinite}
+        .orb-b{animation:floatB 9s ease-in-out infinite .8s}
+    </style>
+</head>
+<body>
+    <div class="mesh-bg"></div>
+
+    <!-- Floating orbs -->
+    <div class="orb-a fixed top-20 right-20 w-16 h-16 rounded-full opacity-20" style="background:rgba(255,137,172,.5);filter:blur(10px)"></div>
+    <div class="orb-b fixed bottom-24 left-20 w-12 h-12 rounded-full opacity-20" style="background:rgba(189,130,255,.6);filter:blur(8px)"></div>
+
+    <main class="flex-grow flex items-center justify-center p-6 relative z-10">
+        <div class="w-full max-w-[440px]">
+
+            <!-- Brand -->
+            <div class="text-center mb-10">
+                <a href="/" class="inline-block">
+                    <div class="text-3xl font-bold font-['Space_Grotesk'] brand-glow tracking-tight">Lyricist AI</div>
+                </a>
+                <p class="text-on-surface-variant text-sm mt-2 tracking-wide">Join the synthetic songwriting era</p>
+            </div>
+
+            <!-- Card -->
+            <div class="glass glow-ring rounded-[1.75rem] p-8 relative overflow-hidden">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 h-px w-2/3 bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
+
+                <h2 class="font-['Space_Grotesk'] text-xl font-bold mb-6">Create account</h2>
+
+                <!-- Flash messages -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}{% for category, message in messages %}
+                    <div class="{{ 'flash-error' if category == 'error' else 'flash-success' }} mb-5">
+                        <span class="material-symbols-outlined text-sm">{{ 'error' if category == 'error' else 'check_circle' }}</span>
+                        {{ message }}
+                    </div>
+                  {% endfor %}{% endif %}
+                {% endwith %}
+
+                <form action="/register" method="POST" class="space-y-5">
+                    <div>
+                        <label class="label">Username</label>
+                        <div class="input-wrap relative">
+                            <span class="material-symbols-outlined input-icon">person</span>
+                            <input class="input-field" name="username" required type="text" placeholder="Swiftie13" autocomplete="username"/>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="label">Email address</label>
+                        <div class="input-wrap relative">
+                            <span class="material-symbols-outlined input-icon">mail</span>
+                            <input class="input-field" name="email" required type="email" placeholder="poet@ethereal.ai" autocomplete="email"/>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="label">Password</label>
+                        <div class="input-wrap relative">
+                            <span class="material-symbols-outlined input-icon">lock</span>
+                            <input class="input-field" name="password" required type="password" placeholder="••••••••" autocomplete="new-password"/>
+                        </div>
+                    </div>
+                    <p class="text-on-surface-variant text-xs leading-relaxed">
+                        By registering, you agree to our
+                        <a href="#" class="text-primary hover:underline">Terms of Service</a> and
+                        <a href="#" class="text-primary hover:underline">Privacy Policy</a>.
+                    </p>
+                    <button class="btn-primary" type="submit">Create Account</button>
+                </form>
+
+                <div class="divider my-6">or sign up with</div>
+
+                <div class="flex gap-3">
+                    <button class="btn-social">
+                        <img src="https://www.google.com/favicon.ico" class="w-4 h-4" alt=""/>
+                        Google
+                    </button>
+                    <button class="btn-social">
+                        <span class="material-symbols-outlined text-sm">hub</span>
+                        GitHub
+                    </button>
+                </div>
+            </div>
+
+            <p class="text-center text-on-surface-variant text-sm mt-6">
+                Already have an account?
+                <a href="/login" class="text-primary font-semibold hover:text-secondary transition-colors ml-1">Sign in →</a>
+            </p>
+        </div>
+    </main>
+
+    <footer class="relative z-10 py-6 text-center text-on-surface-variant text-xs">
+        © 2026 Lyricist AI · <a href="#" class="hover:text-primary transition-colors">Privacy</a> · <a href="#" class="hover:text-primary transition-colors">Terms</a>
+    </footer>
+</body>
+</html>

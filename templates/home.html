@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Lyricist AI — The Future of Songwriting</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+    <script>tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ff89ac","secondary":"#bd82ff","tertiary":"#ff94a3","background":"#0a0e17","on-surface":"#ebedfb","on-surface-variant":"#a7abb7","surface-container":"#151925","surface-container-high":"#1a1f2c","surface-container-highest":"#202633","outline-variant":"#444852","secondary-container":"#6807ba"},fontFamily:{headline:["Space Grotesk"],body:["Inter"],poetry:["Playfair Display"]}}}}</script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { background: #0a0e17; color: #ebedfb; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+        /* ── Background ── */
+        .bg-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+        .bg-canvas::before { content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse 70% 60% at 15% 20%, rgba(121,40,202,.2) 0%, transparent 55%),
+                        radial-gradient(ellipse 60% 50% at 85% 75%, rgba(255,0,128,.14) 0%, transparent 55%),
+                        radial-gradient(ellipse 40% 40% at 60% 50%, rgba(255,137,172,.05) 0%, transparent 60%); }
+        .noise-overlay { position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: .03;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+        /* ── Navbar ── */
+        .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(10,14,23,.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,.04); transition: all .3s ease; }
+        .nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; height: 4rem;
+            display: flex; align-items: center; justify-content: space-between; }
+        .brand { font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; font-weight: 700;
+            background: linear-gradient(135deg, #bd82ff, #ff89ac); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -.02em; }
+        .nav-links { display: flex; align-items: center; gap: 2rem; }
+        .nav-link { font-family: 'Space Grotesk', sans-serif; font-size: .78rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: .1em; color: #a7abb7; text-decoration: none;
+            transition: color .2s ease; position: relative; }
+        .nav-link:hover { color: #ebedfb; }
+        .nav-link.active { color: #ebedfb; }
+        .nav-link.active::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+            height: 1px; background: linear-gradient(90deg, #bd82ff, #ff89ac); }
+        .btn-nav-login { font-family: 'Space Grotesk', sans-serif; font-size: .8rem; font-weight: 600;
+            color: #a7abb7; text-decoration: none; padding: .5rem; transition: color .2s; }
+        .btn-nav-login:hover { color: #ebedfb; }
+        .btn-nav-cta { font-family: 'Space Grotesk', sans-serif; font-size: .8rem; font-weight: 700;
+            background: linear-gradient(135deg, #6807ba, #ff89ac); color: #fff; text-decoration: none;
+            padding: .55rem 1.25rem; border-radius: .6rem; transition: all .3s ease; letter-spacing: .03em; }
+        .btn-nav-cta:hover { box-shadow: 0 6px 24px rgba(255,137,172,.3); transform: translateY(-1px); }
+
+        /* ── Hero ── */
+        .hero { position: relative; z-index: 10; padding: 10rem 1.5rem 7rem; text-align: center; }
+        .hero-eyebrow { display: inline-flex; align-items: center; gap: .6rem; padding: .45rem 1.1rem;
+            background: rgba(189,130,255,.07); border: 1px solid rgba(189,130,255,.18); border-radius: 9999px;
+            font-size: .68rem; font-family: 'Space Grotesk', sans-serif; font-weight: 700;
+            text-transform: uppercase; letter-spacing: .12em; color: #bd82ff; margin-bottom: 2rem; }
+        .hero-eyebrow .pulse { width: .5rem; height: .5rem; border-radius: 50%; background: #bd82ff;
+            animation: pulse 2s ease infinite; }
+        @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(189,130,255,.5); } 50% { box-shadow: 0 0 0 6px rgba(189,130,255,0); } }
+        .hero-h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.8rem, 7vw, 6rem);
+            font-weight: 700; line-height: 1.05; letter-spacing: -.04em; max-width: 820px; margin: 0 auto 1.5rem; }
+        .hero-gradient-text { background: linear-gradient(135deg, #ff89ac 0%, #bd82ff 50%, #ff94a3 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero-sub { font-size: 1.1rem; line-height: 1.7; color: #a7abb7; max-width: 540px; margin: 0 auto 2.5rem; }
+        .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .btn-hero-primary { display: inline-flex; align-items: center; gap: .6rem; padding: 1rem 2rem;
+            background: linear-gradient(135deg, #6807ba, #ff89ac); color: #fff; font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700; font-size: 1rem; border-radius: .875rem; text-decoration: none;
+            box-shadow: 0 8px 40px rgba(255,137,172,.3); transition: all .3s ease; border: none; cursor: pointer; }
+        .btn-hero-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 50px rgba(255,137,172,.4); }
+        .btn-hero-secondary { display: inline-flex; align-items: center; gap: .6rem; padding: 1rem 2rem;
+            background: rgba(32,38,51,.6); color: #ebedfb; font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600; font-size: 1rem; border-radius: .875rem; text-decoration: none;
+            border: 1px solid rgba(68,72,82,.5); backdrop-filter: blur(8px); transition: all .3s ease; cursor: pointer; }
+        .btn-hero-secondary:hover { border-color: rgba(189,130,255,.4); background: rgba(32,38,51,.9); }
+        /* Hero Dashboard Mockup */
+        .hero-mockup-wrap { position: relative; max-width: 900px; margin: 5rem auto 0; }
+        .hero-mockup-glow { position: absolute; inset: -2px; border-radius: 1.75rem;
+            background: linear-gradient(135deg, rgba(189,130,255,.25), rgba(255,137,172,.2));
+            filter: blur(20px); opacity: .6; transition: opacity .3s; }
+        .hero-mockup-wrap:hover .hero-mockup-glow { opacity: 1; }
+        .hero-mockup { position: relative; background: rgba(21,25,37,.9); border: 1px solid rgba(255,255,255,.06);
+            border-radius: 1.5rem; overflow: hidden; backdrop-filter: blur(20px); }
+        .mockup-topbar { height: 2.75rem; background: rgba(10,14,23,.8);
+            border-bottom: 1px solid rgba(255,255,255,.05); display: flex; align-items: center; padding: 0 1.25rem; gap: .5rem; }
+        .dot { width: .65rem; height: .65rem; border-radius: 50%; }
+        .mockup-body { padding: 2rem; display: grid; grid-template-columns: 1fr 1.5fr; gap: 1.5rem; }
+        .mockup-panel { background: rgba(32,38,51,.5); border: 1px solid rgba(68,72,82,.2); border-radius: 1rem; padding: 1.25rem; }
+        .mockup-label { font-size: .62rem; font-family: 'Space Grotesk', sans-serif; font-weight: 700;
+            text-transform: uppercase; letter-spacing: .15em; color: #727581; margin-bottom: .75rem; }
+        .mockup-input { width: 100%; background: rgba(10,14,23,.7); border-radius: .5rem; padding: .6rem .75rem;
+            font-size: .8rem; color: #ebedfb; border: 1px solid rgba(68,72,82,.4); display: flex; align-items: center; gap: .5rem; }
+        .mockup-range { height: 4px; background: rgba(68,72,82,.4); border-radius: 9999px; margin: .75rem 0;
+            position: relative; }
+        .mockup-range::after { content: ''; position: absolute; left: 0; top: 0; width: 65%;
+            height: 100%; background: linear-gradient(90deg, #bd82ff, #ff89ac); border-radius: 9999px; }
+        .mockup-btn { width: 100%; margin-top: .75rem; padding: .65rem; background: linear-gradient(135deg, #6807ba, #ff89ac);
+            border-radius: .6rem; text-align: center; font-size: .82rem; font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
+        .mockup-lyrics { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1rem;
+            line-height: 1.9; color: #ebedfb; opacity: .9; }
+        .mockup-lyrics em { -webkit-text-fill-color: transparent;
+            background: linear-gradient(135deg, #ff89ac, #bd82ff); -webkit-background-clip: text; background-clip: text; font-style: normal; }
+        @keyframes typewrite { from { opacity: 0; } to { opacity: 1; } }
+
+        /* ── Glass ── */
+        .glass { background: rgba(21,25,37,.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,.05); }
+
+        /* ── Feature Cards ── */
+        .section { position: relative; z-index: 10; padding: 7rem 1.5rem; }
+        .section-inner { max-width: 1200px; margin: 0 auto; }
+        .section-label { display: inline-flex; align-items: center; gap: .5rem; font-size: .68rem;
+            font-family: 'Space Grotesk', sans-serif; font-weight: 700; text-transform: uppercase;
+            letter-spacing: .12em; padding: .4rem 1rem; border-radius: 9999px; }
+        .section-h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700; letter-spacing: -.03em; line-height: 1.1; }
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .feature-card { border-radius: 1.75rem; padding: 2.5rem; transition: all .35s ease;
+            position: relative; overflow: hidden; cursor: default; }
+        .feature-card::before { content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity .35s;
+            border-radius: inherit; }
+        .feature-card:hover { transform: translateY(-6px); }
+        .feature-card:hover::before { opacity: 1; }
+        .feature-card.c1::before { background: radial-gradient(circle at 30% 30%, rgba(189,130,255,.08), transparent 60%); }
+        .feature-card.c2::before { background: radial-gradient(circle at 30% 30%, rgba(255,137,172,.08), transparent 60%); }
+        .feature-card.c3::before { background: radial-gradient(circle at 30% 30%, rgba(255,148,163,.08), transparent 60%); }
+        .feature-icon { width: 3rem; height: 3rem; border-radius: .875rem; display: flex; align-items: center;
+            justify-content: center; margin-bottom: 1.5rem; }
+        .feature-h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; font-weight: 700;
+            margin-bottom: .75rem; }
+        .feature-p { font-size: .93rem; line-height: 1.7; color: #a7abb7; }
+
+        /* ── Stats Banner ── */
+        .stat-band { border-top: 1px solid rgba(255,255,255,.04); border-bottom: 1px solid rgba(255,255,255,.04);
+            background: rgba(21,25,37,.5); padding: 3rem 1.5rem; }
+        .stat-grid { max-width: 960px; margin: 0 auto; display: grid;
+            grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+        @media(min-width:640px){ .stat-grid { grid-template-columns: repeat(4, 1fr); } }
+        .stat-val { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; font-weight: 700;
+            background: linear-gradient(135deg, #bd82ff, #ff89ac); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; background-clip: text; }
+        .stat-lbl { font-size: .75rem; font-family: 'Space Grotesk', sans-serif; font-weight: 600;
+            text-transform: uppercase; letter-spacing: .1em; color: #727581; margin-top: .25rem; }
+
+        /* ── Lyrics Showcase ── */
+        .lyric-card { border-radius: 1.75rem; padding: 2.5rem; position: relative; overflow: hidden; }
+        .lyric-quote { font-family: 'Playfair Display', serif; font-style: italic;
+            font-size: clamp(1.1rem, 2.5vw, 1.45rem); line-height: 1.9; color: #ebedfb; }
+        .lyric-seed { display: inline-flex; align-items: center; gap: .5rem; padding: .35rem .9rem;
+            background: rgba(255,137,172,.1); border: 1px solid rgba(255,137,172,.2); border-radius: 9999px;
+            font-size: .7rem; font-family: 'Space Grotesk', sans-serif; font-weight: 700;
+            text-transform: uppercase; letter-spacing: .1em; color: #ff89ac; margin-bottom: 1.25rem; }
+
+        /* ── CTA ── */
+        .cta-section { position: relative; z-index: 10; padding: 7rem 1.5rem; }
+        .cta-card { max-width: 800px; margin: 0 auto; border-radius: 2.5rem; padding: 5rem 3rem;
+            text-align: center; border: 1px solid rgba(255,255,255,.06); position: relative; overflow: hidden;
+            background: rgba(21,25,37,.7); backdrop-filter: blur(20px); }
+        .cta-card::before { content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse 80% 80% at 50% 50%, rgba(104,7,186,.12), transparent 70%); pointer-events: none; }
+        .cta-h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700; letter-spacing: -.03em; margin-bottom: 1.25rem; line-height: 1.15; }
+        .cta-p { color: #a7abb7; max-width: 480px; margin: 0 auto 2.5rem; line-height: 1.7; }
+
+        /* ── Footer ── */
+        footer { position: relative; z-index: 10; border-top: 1px solid rgba(255,255,255,.04);
+            padding: 3.5rem 1.5rem; }
+        .footer-inner { max-width: 1200px; margin: 0 auto; display: flex;
+            flex-direction: column; gap: 2rem; }
+        @media(min-width:768px){ .footer-inner { flex-direction: row; align-items: center; justify-content: space-between; } }
+        .footer-brand { font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; font-weight: 700;
+            background: linear-gradient(135deg, #bd82ff, #ff89ac); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; background-clip: text; }
+        .footer-links { display: flex; gap: 2rem; flex-wrap: wrap; }
+        .footer-link { font-size: .8rem; color: #727581; text-decoration: none; transition: color .2s; }
+        .footer-link:hover { color: #ebedfb; }
+
+        /* ── Floating Orbs ── */
+        @keyframes floatA { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-18px)} }
+        @keyframes floatB { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+        .orb { position: fixed; border-radius: 50%; pointer-events: none; z-index: 2; }
+
+        /* ── Responsive ── */
+        @media(max-width:768px){ .nav-links { display: none; } .mockup-body { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="bg-canvas"></div>
+    <div class="noise-overlay"></div>
+
+    <!-- Floating orbs -->
+    <div class="orb" style="top:12%;left:8%;width:90px;height:90px;background:rgba(189,130,255,.15);filter:blur(30px);animation:floatA 8s ease-in-out infinite"></div>
+    <div class="orb" style="top:40%;right:6%;width:70px;height:70px;background:rgba(255,137,172,.12);filter:blur(24px);animation:floatB 10s ease-in-out infinite .5s"></div>
+    <div class="orb" style="bottom:20%;left:15%;width:60px;height:60px;background:rgba(255,148,163,.1);filter:blur(20px);animation:floatA 9s ease-in-out infinite 1s"></div>
+
+    <!-- Navbar -->
+    <header class="navbar" id="navbar">
+        <div class="nav-inner">
+            <a href="/" class="brand">Lyricist AI</a>
+            <nav class="nav-links">
+                <a href="/technology" class="nav-link">Technology</a>
+                <a href="/process" class="nav-link">Process</a>
+                <a href="/pricing" class="nav-link">Pricing</a>
+            </nav>
+            <div style="display:flex;align-items:center;gap:1rem">
+                <a href="/login" class="btn-nav-login">Login</a>
+                <a href="/register" class="btn-nav-cta">Get Started</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ━━━ HERO ━━━ -->
+    <section class="hero">
+        <div class="hero-eyebrow">
+            <div class="pulse"></div>
+            Neural Network Engine v2 · Live
+        </div>
+        <h1 class="hero-h1">
+            The Future of<br/>
+            Songwriting is<br/>
+            <span class="hero-gradient-text">Synthetic</span>
+        </h1>
+        <p class="hero-sub">
+            Generate Taylor Swift-inspired lyrics using state-of-the-art LSTM Deep Learning. Bridging the gap between neural networks and poetic expression.
+        </p>
+        <div class="hero-actions">
+            <a href="/register" class="btn-hero-primary">
+                <span class="material-symbols-outlined" style="font-size:1.1rem">auto_awesome</span>
+                Start Generating
+            </a>
+            <a href="/technology" class="btn-hero-secondary">
+                <span class="material-symbols-outlined" style="font-size:1rem">memory</span>
+                How it Works
+            </a>
+        </div>
+
+        <!-- Mockup Dashboard -->
+        <div class="hero-mockup-wrap">
+            <div class="hero-mockup-glow"></div>
+            <div class="hero-mockup">
+                <div class="mockup-topbar">
+                    <div class="dot" style="background:#ff6b6b"></div>
+                    <div class="dot" style="background:#ffd93d"></div>
+                    <div class="dot" style="background:#6bcb77"></div>
+                    <span style="font-size:.72rem;color:#444852;margin-left:.75rem;font-family:'Space Grotesk',sans-serif">lyricist.ai / generator</span>
+                </div>
+                <div class="mockup-body">
+                    <!-- Controls -->
+                    <div style="display:flex;flex-direction:column;gap:1rem">
+                        <div class="mockup-panel">
+                            <div class="mockup-label">Seed Phrase</div>
+                            <div class="mockup-input">
+                                <span class="material-symbols-outlined" style="font-size:.9rem;color:#727581">edit_note</span>
+                                <span style="color:#ebedfb;font-size:.82rem">i knew you were trouble</span>
+                                <span style="width:1px;height:.9rem;background:#ff89ac;margin-left:1px;animation:blink 1s step-end infinite"></span>
+                            </div>
+                        </div>
+                        <div class="mockup-panel">
+                            <div class="mockup-label" style="display:flex;justify-content:space-between"><span>Words</span><span style="color:#ff89ac;font-family:'Space Grotesk',sans-serif;font-weight:700">30</span></div>
+                            <div class="mockup-range"></div>
+                            <div class="mockup-label" style="display:flex;justify-content:space-between;margin-top:.75rem"><span>Temperature</span><span style="color:#bd82ff;font-family:'Space Grotesk',sans-serif;font-weight:700">0.8</span></div>
+                            <div class="mockup-range" style="margin-top:.4rem">
+                                <div style="position:absolute;left:0;top:0;width:53%;height:100%;background:linear-gradient(90deg,#bd82ff,#ff89ac);border-radius:9999px"></div>
+                            </div>
+                        </div>
+                        <div class="mockup-btn">✦ Generate Lyrics</div>
+                    </div>
+                    <!-- Lyrics Output -->
+                    <div class="mockup-panel" style="display:flex;flex-direction:column;gap:.75rem">
+                        <div style="display:flex;gap:.5rem;align-items:center">
+                            <span style="font-size:.62rem;font-family:'Space Grotesk',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#727581">AI Output</span>
+                            <span style="font-size:.62rem;padding:.15rem .5rem;background:rgba(189,130,255,.1);color:#bd82ff;border-radius:9999px;font-family:'Space Grotesk',sans-serif;font-weight:700">LSTM-v2</span>
+                        </div>
+                        <div class="mockup-lyrics" style="font-size:.92rem">
+                            i knew you were trouble<br/>
+                            <em>when you walked in...</em><br/><br/>
+                            the story of us<br/>
+                            looks a lot like a<br/>
+                            <em>tragedy now...</em>
+                        </div>
+                        <div style="margin-top:auto;display:flex;align-items:center;gap:.5rem;font-size:.68rem;color:#444852;font-family:'Space Grotesk',sans-serif">
+                            <span class="material-symbols-outlined" style="font-size:.9rem">history_edu</span>
+                            Drafted by The Neon Lyricist
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ━━━ STATS ━━━ -->
+    <div class="stat-band">
+        <div class="stat-grid">
+            <div style="text-align:center">
+                <div class="stat-val">94</div>
+                <div class="stat-lbl">Songs Analyzed</div>
+            </div>
+            <div style="text-align:center">
+                <div class="stat-val">2.3K</div>
+                <div class="stat-lbl">Word Vocabulary</div>
+            </div>
+            <div style="text-align:center">
+                <div class="stat-val">50</div>
+                <div class="stat-lbl">Training Epochs</div>
+            </div>
+            <div style="text-align:center">
+                <div class="stat-val">42%</div>
+                <div class="stat-lbl">Word Accuracy</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ━━━ FEATURES ━━━ -->
+    <section class="section" id="features">
+        <div class="section-inner">
+            <div style="text-align:center;margin-bottom:4rem;display:flex;flex-direction:column;align-items:center;gap:1.25rem">
+                <div class="section-label" style="background:rgba(189,130,255,.08);border:1px solid rgba(189,130,255,.2);color:#bd82ff">
+                    <span class="material-symbols-outlined" style="font-size:.9rem">stars</span>
+                    Platform Features
+                </div>
+                <h2 class="section-h2">Crafting the<br/><span style="background:linear-gradient(135deg,#bd82ff,#ff89ac);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Digital Muse</span></h2>
+                <div style="width:3rem;height:2px;background:linear-gradient(90deg,#bd82ff,#ff89ac);border-radius:9999px"></div>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-card c1 glass">
+                    <div class="feature-icon" style="background:rgba(189,130,255,.1)">
+                        <span class="material-symbols-outlined" style="color:#bd82ff">memory</span>
+                    </div>
+                    <div class="feature-h3">Deep Learning Engine</div>
+                    <p class="feature-p">Powered by TensorFlow & Keras, our multi-layer LSTM architecture captures long-range lyrical dependencies — rhyme schemes, themes, and semantic flow.</p>
+                    <div style="margin-top:1.5rem;display:flex;gap:.5rem;flex-wrap:wrap">
+                        <span style="padding:.25rem .7rem;background:rgba(189,130,255,.08);border:1px solid rgba(189,130,255,.15);border-radius:9999px;font-size:.68rem;font-family:'Space Grotesk',sans-serif;color:#bd82ff;font-weight:600">TensorFlow</span>
+                        <span style="padding:.25rem .7rem;background:rgba(189,130,255,.08);border:1px solid rgba(189,130,255,.15);border-radius:9999px;font-size:.68rem;font-family:'Space Grotesk',sans-serif;color:#bd82ff;font-weight:600">Keras LSTM</span>
+                    </div>
+                </div>
+                <div class="feature-card c2 glass">
+                    <div class="feature-icon" style="background:rgba(255,137,172,.1)">
+                        <span class="material-symbols-outlined" style="color:#ff89ac">tune</span>
+                    </div>
+                    <div class="feature-h3">Nuanced Control</div>
+                    <p class="feature-p">Fine-tune your creativity with adjustable temperature and word count sliders. Low temperature yields coherent lines; high temperature delivers abstract poetry.</p>
+                    <div style="margin-top:1.5rem;display:flex;gap:.5rem;flex-wrap:wrap">
+                        <span style="padding:.25rem .7rem;background:rgba(255,137,172,.08);border:1px solid rgba(255,137,172,.15);border-radius:9999px;font-size:.68rem;font-family:'Space Grotesk',sans-serif;color:#ff89ac;font-weight:600">Temperature</span>
+                        <span style="padding:.25rem .7rem;background:rgba(255,137,172,.08);border:1px solid rgba(255,137,172,.15);border-radius:9999px;font-size:.68rem;font-family:'Space Grotesk',sans-serif;color:#ff89ac;font-weight:600">0.3 → 1.5</span>
+                    </div>
+                </div>
+                <div class="feature-card c3 glass">
+                    <div class="feature-icon" style="background:rgba(255,148,163,.1)">
+                        <span class="material-symbols-outlined" style="color:#ff94a3">auto_awesome</span>
+                    </div>
+                    <div class="feature-h3">Poetic Precision</div>
+                    <p class="feature-p">Trained on 4,862 lines of authentic lyricism, the model mirrors the emotive, confessional storytelling that defines Taylor Swift's musical era.</p>
+                    <div style="margin-top:1.5rem;display:flex;gap:.5rem;flex-wrap:wrap">
+                        <span style="padding:.25rem .7rem;background:rgba(255,148,163,.08);border:1px solid rgba(255,148,163,.15);border-radius:9999px;font-size:.68rem;font-family:'Space Grotesk',sans-serif;color:#ff94a3;font-weight:600">4,862 lines</span>
+                        <span style="padding:.25rem .7rem;background:rgba(255,148,163,.08);border:1px solid rgba(255,148,163,.15);border-radius:9999px;font-size:.68rem;font-family:'Space Grotesk',sans-serif;color:#ff94a3;font-weight:600">94 songs</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ━━━ LYRICS SHOWCASE ━━━ -->
+    <section class="section" style="padding-top:0">
+        <div class="section-inner">
+            <div style="text-align:center;margin-bottom:3rem;display:flex;flex-direction:column;align-items:center;gap:1rem">
+                <div class="section-label" style="background:rgba(255,137,172,.08);border:1px solid rgba(255,137,172,.2);color:#ff89ac">
+                    <span class="material-symbols-outlined" style="font-size:.9rem">format_quote</span>
+                    AI Generated
+                </div>
+                <h2 class="section-h2" style="font-size:clamp(1.8rem,4vw,2.8rem)">Synthetic <span style="background:linear-gradient(135deg,#ff89ac,#ff94a3);-webkit-background-clip:text;-webkit-text-fill-color:transparent">examples</span></h2>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr;gap:1.5rem">
+                <!-- Big card -->
+                <div class="lyric-card glass" style="border-left:3px solid rgba(255,137,172,.4)">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem;flex-wrap:wrap;gap:1rem">
+                        <div class="lyric-seed">
+                            <span class="material-symbols-outlined" style="font-size:.8rem">edit_note</span>
+                            Seed: "i knew you were trouble"
+                        </div>
+                        <div style="font-size:.68rem;font-family:'Space Grotesk',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#444852;display:flex;align-items:center;gap:.4rem">
+                            <span style="width:.4rem;height:.4rem;background:#6bcb77;border-radius:50%;display:inline-block"></span>
+                            Temp: 0.8
+                        </div>
+                    </div>
+                    <div class="lyric-quote">
+                        "i knew you were trouble when you walked in<br/>
+                        so shame on me now, flew me to places I'd never been<br/>
+                        now I'm lying on the cold hard ground..."
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+                    <div class="lyric-card glass">
+                        <div class="lyric-seed" style="font-size:.62rem;padding:.3rem .75rem">Seed: "shake it off"</div>
+                        <div class="lyric-quote" style="font-size:1rem">
+                            "shake it off, shake it off<br/>
+                            haters gonna hate, hate, hate<br/>
+                            baby I'm just gonna shake..."
+                        </div>
+                    </div>
+                    <div class="lyric-card glass" style="border-left:3px solid rgba(189,130,255,.35)">
+                        <div class="lyric-seed" style="font-size:.62rem;padding:.3rem .75rem;background:rgba(189,130,255,.1);border-color:rgba(189,130,255,.2);color:#bd82ff">Seed: "love story"</div>
+                        <div class="lyric-quote" style="font-size:1rem">
+                            "romeo save me, they're trying to tell me<br/>
+                            how to feel, this love is difficult<br/>
+                            but it's real..."
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ━━━ CTA ━━━ -->
+    <section class="cta-section">
+        <div class="cta-card">
+            <div class="hero-eyebrow" style="justify-content:center;margin:0 auto 2rem">
+                <div class="pulse"></div>
+                Ready to create?
+            </div>
+            <h2 class="cta-h2">
+                Write your next<br/>
+                <span style="background:linear-gradient(135deg,#ff89ac,#bd82ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent">masterpiece</span>
+            </h2>
+            <p class="cta-p">Join the ecosystem of synthetic storytellers. Let the LSTM model channel Taylor Swift's essence into your lyrics.</p>
+            <div class="hero-actions">
+                <a href="/register" class="btn-hero-primary">
+                    <span class="material-symbols-outlined" style="font-size:1.1rem">auto_awesome</span>
+                    Get Started for Free
+                </a>
+                <a href="/pricing" class="btn-hero-secondary">See Pricing</a>
+            </div>
+            <div style="margin-top:2.5rem;display:flex;justify-content:center;align-items:center;gap:3rem;opacity:.3;filter:grayscale(1)">
+                <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.1rem">SONY MUSIC</span>
+                <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.1rem">WARNER</span>
+                <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.1rem">UNIVERSAL</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ━━━ FOOTER ━━━ -->
+    <footer>
+        <div class="footer-inner">
+            <div>
+                <div class="footer-brand">Lyricist AI</div>
+                <div style="font-size:.78rem;color:#444852;margin-top:.35rem">© 2026 The Neon Lyricist. All rights reserved.</div>
+            </div>
+            <div class="footer-links">
+                <a href="/technology" class="footer-link">Technology</a>
+                <a href="/process" class="footer-link">Process</a>
+                <a href="/pricing" class="footer-link">Pricing</a>
+                <a href="/login" class="footer-link">Login</a>
+                <a href="#" class="footer-link">Privacy</a>
+                <a href="#" class="footer-link">AI Ethics</a>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    </style>
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 40) {
+                navbar.style.background = 'rgba(10,14,23,.95)';
+                navbar.style.boxShadow = '0 4px 30px rgba(0,0,0,.4)';
+            } else {
+                navbar.style.background = 'rgba(10,14,23,.7)';
+                navbar.style.boxShadow = 'none';
+            }
+        });
+
+        // Counter animation
+        function animateCounter(el, target, suffix='') {
+            let start = 0;
+            const duration = 1800;
+            const step = timestamp => {
+                if (!step.start) step.start = timestamp;
+                const progress = Math.min((timestamp - step.start) / duration, 1);
+                const val = Math.floor(progress * target);
+                el.textContent = val >= 1000 ? (val/1000).toFixed(1) + 'K' + suffix : val + suffix;
+                if (progress < 1) requestAnimationFrame(step);
+                else el.textContent = target >= 1000 ? (target/1000).toFixed(1) + 'K' + suffix : target + suffix;
+            };
+            requestAnimationFrame(step);
+        }
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const vals = entry.target.querySelectorAll('.stat-val');
+                    const targets = [94, 2300, 50, 42];
+                    const suffixes = ['', '', '', '%'];
+                    vals.forEach((el, i) => animateCounter(el, targets[i], suffixes[i]));
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        const statBand = document.querySelector('.stat-band');
+        if (statBand) observer.observe(statBand);
+    </script>
+</body>
+</html>

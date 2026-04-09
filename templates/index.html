@@ -137,14 +137,18 @@
                     href="#">Library</a>
             </div>
             <div class="flex items-center gap-4">
+                <span class="text-on-surface-variant text-sm font-headline hidden sm:inline">Hello, {{ username }}</span>
                 <button
-                    class="p-2 text-slate-400 hover:bg-white/5 transition-all duration-300 rounded-full scale-95 active:scale-90">
+                    class="p-2 text-slate-400 hover:bg-white/5 transition-all duration-300 rounded-full scale-95 active:scale-90"
+                    title="Settings">
                     <span class="material-symbols-outlined" data-icon="settings">settings</span>
                 </button>
-                <button
-                    class="p-2 text-slate-400 hover:bg-white/5 transition-all duration-300 rounded-full scale-95 active:scale-90">
-                    <span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
-                </button>
+                <a href="/logout"
+                    class="flex items-center gap-2 p-2 px-3 text-slate-400 hover:text-primary hover:bg-white/5 transition-all duration-300 rounded-lg scale-95 active:scale-90"
+                    title="Logout">
+                    <span class="material-symbols-outlined" data-icon="logout">logout</span>
+                    <span class="text-xs font-headline uppercase tracking-widest hidden md:inline">Logout</span>
+                </a>
             </div>
             <div
                 class="bg-gradient-to-r from-transparent via-purple-500/20 to-transparent h-[1px] w-full absolute bottom-0 left-0">
@@ -276,7 +280,7 @@
     <footer class="w-full py-8 mt-auto bg-[#0a0e17] border-t border-white/5">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center px-8 gap-6">
             <div class="text-on-surface-variant font-['Inter'] text-[10px] tracking-widest uppercase opacity-60">
-                © 2024 Ethereal Synthetic AI. Built for the Neon Lyricist.
+                © 2026 Ethereal Synthetic AI. Built for the Neon Lyricist.
             </div>
             <div class="flex flex-wrap justify-center gap-x-8 gap-y-2">
                 <div class="flex items-center gap-2">

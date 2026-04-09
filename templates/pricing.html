@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Pricing — Lyricist AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+    <script>tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ff89ac","secondary":"#bd82ff","tertiary":"#ff94a3","background":"#0a0e17","on-surface":"#ebedfb","on-surface-variant":"#a7abb7","outline-variant":"#444852"},fontFamily:{headline:["Space Grotesk"],body:["Inter"]}}}}</script>
+    <style>
+        *{box-sizing:border-box}
+        body{background:#0a0e17;color:#ebedfb;font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+        .mesh{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 60% at 50% 10%,rgba(121,40,202,.15) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 20% 90%,rgba(255,0,128,.1) 0%,transparent 60%)}
+        .glass{background:rgba(21,25,37,.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.05)}
+        .nav-link{font-family:'Space Grotesk',sans-serif;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;transition:color .2s}
+        .nav-link:hover{color:#ebedfb}
+        .section-tag{display:inline-flex;align-items:center;gap:.5rem;padding:.4rem 1rem;background:rgba(255,148,163,.08);border:1px solid rgba(255,148,163,.2);border-radius:9999px;font-size:.7rem;font-family:'Space Grotesk',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:#ff94a3}
+        /* Pricing Cards */
+        .plan-card{border-radius:2rem;padding:2.5rem 2rem;border:1px solid rgba(68,72,82,.25);background:rgba(21,25,37,.7);backdrop-filter:blur(12px);transition:all .3s ease;display:flex;flex-direction:column}
+        .plan-card:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.1)}
+        .plan-card.popular{border:1.5px solid rgba(189,130,255,.4);background:rgba(104,7,186,.08);box-shadow:0 0 40px rgba(121,40,202,.15),0 20px 60px rgba(0,0,0,.3)}
+        .plan-price{font-family:'Space Grotesk',sans-serif;font-size:3.5rem;font-weight:700;line-height:1}
+        .plan-period{font-size:.9rem;color:#a7abb7;font-weight:400;margin-left:.2rem}
+        .feature-item{display:flex;align-items:flex-start;gap:.75rem;padding:.6rem 0;font-size:.9rem;color:#a7abb7;border-bottom:1px solid rgba(68,72,82,.15)}
+        .feature-item:last-child{border-bottom:none}
+        .feature-item .check{color:#bd82ff;flex-shrink:0;font-size:1.1rem}
+        .feature-item.muted .check{color:#444852}
+        .feature-item.muted span:last-child{text-decoration:line-through;opacity:.4}
+        .btn-plan{width:100%;padding:1rem;border-radius:.875rem;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:.05em;cursor:pointer;transition:all .3s ease;border:none;margin-top:auto}
+        .btn-plan.outline{background:transparent;border:1px solid rgba(68,72,82,.5);color:#a7abb7}
+        .btn-plan.outline:hover{border-color:#bd82ff;color:#bd82ff;background:rgba(189,130,255,.05)}
+        .btn-plan.filled{background:linear-gradient(135deg,#6807ba,#ff89ac);color:#fff}
+        .btn-plan.filled:hover{box-shadow:0 8px 30px rgba(189,130,255,.3);transform:translateY(-1px)}
+        .popular-badge{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .8rem;background:linear-gradient(135deg,#6807ba,#bd82ff);border-radius:9999px;font-size:.65rem;font-family:'Space Grotesk',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-bottom:1rem}
+        .faq-row{padding:1.5rem 0;border-bottom:1px solid rgba(68,72,82,.2)}
+        .faq-q{font-family:'Space Grotesk',sans-serif;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+        .faq-a{font-size:.9rem;color:#a7abb7;margin-top:.75rem;line-height:1.7;display:none}
+    </style>
+</head>
+<body>
+    <div class="mesh"></div>
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 w-full z-50 glass border-b border-white/5">
+        <div class="flex justify-between items-center max-w-7xl mx-auto px-6 h-16">
+            <a href="/" class="font-['Space_Grotesk'] text-xl font-bold" style="background:linear-gradient(135deg,#bd82ff,#ff89ac);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Lyricist AI</a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="/technology" class="nav-link text-on-surface-variant">Technology</a>
+                <a href="/process" class="nav-link text-on-surface-variant">Process</a>
+                <a href="/pricing" class="nav-link text-tertiary border-b border-tertiary pb-0.5">Pricing</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="/login" class="nav-link text-on-surface-variant">Login</a>
+                <a href="/register" class="px-4 py-2 rounded-lg text-sm font-semibold font-['Space_Grotesk']" style="background:linear-gradient(135deg,#6807ba,#ff89ac)">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 pt-28 pb-24 px-6">
+        <div class="max-w-6xl mx-auto">
+
+            <!-- Header -->
+            <div class="text-center mb-20 space-y-6">
+                <div class="section-tag mx-auto">
+                    <span class="material-symbols-outlined text-sm">payments</span>
+                    Flexible Plans
+                </div>
+                <h1 class="font-['Space Grotesk'] text-5xl md:text-7xl font-bold tracking-tight">
+                    Find your <span style="background:linear-gradient(135deg,#ff94a3,#bd82ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent">era</span>
+                </h1>
+                <p class="text-on-surface-variant max-w-lg mx-auto leading-relaxed">Transparent pricing. No surprises. Cancel anytime.</p>
+            </div>
+
+            <!-- Toggle -->
+            <div class="flex justify-center mb-12">
+                <div class="flex items-center gap-3 p-1.5 rounded-full glass" style="border:1px solid rgba(68,72,82,.3)">
+                    <button onclick="setToggle('monthly')" id="btn-monthly" class="px-5 py-2 rounded-full text-sm font-['Space_Grotesk'] font-semibold transition-all" style="background:linear-gradient(135deg,#6807ba,#bd82ff);color:#fff">Monthly</button>
+                    <button onclick="setToggle('annual')" id="btn-annual" class="px-5 py-2 rounded-full text-sm font-['Space_Grotesk'] font-semibold text-on-surface-variant transition-all">Annual <span class="text-tertiary">–20%</span></button>
+                </div>
+            </div>
+
+            <!-- Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
+                <!-- Debut -->
+                <div class="plan-card">
+                    <div class="mb-6">
+                        <div class="text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-on-surface-variant mb-3">Debut</div>
+                        <div class="plan-price">Free</div>
+                        <p class="text-on-surface-variant text-sm mt-3">Perfect for fans who want to experiment with the AI once or twice a day.</p>
+                    </div>
+                    <div class="space-y-0 mb-8 flex-grow">
+                        <div class="feature-item"><span class="material-symbols-outlined check text-sm">check_circle</span><span><strong class="text-on-surface">13</strong> generations / day</span></div>
+                        <div class="feature-item"><span class="material-symbols-outlined check text-sm">check_circle</span><span>Standard LSTM model</span></div>
+                        <div class="feature-item"><span class="material-symbols-outlined check text-sm">check_circle</span><span>Seed up to 5 words</span></div>
+                        <div class="feature-item muted"><span class="material-symbols-outlined check text-sm">cancel</span><span>Temperature control</span></div>
+                        <div class="feature-item muted"><span class="material-symbols-outlined check text-sm">cancel</span><span>Cloud save</span></div>
+                        <div class="feature-item muted"><span class="material-symbols-outlined check text-sm">cancel</span><span>API access</span></div>
+                    </div>
+                    <a href="/register" class="btn-plan outline block text-center">Start for Free</a>
+                </div>
+
+                <!-- Folklore (Popular) -->
+                <div class="plan-card popular relative overflow-hidden">
+                    <div class="popular-badge mb-0"><span class="material-symbols-outlined text-[.7rem]">star</span>Most Popular</div>
+                    <div class="mb-6">
+                        <div class="text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-secondary mb-3">Folklore Pro</div>
+                        <div class="plan-price">
+                            <span class="monthly-price">$13</span>
+                            <span class="annual-price hidden">$10</span>
+                            <span class="plan-period">/ month</span>
+                        </div>
+                        <p class="text-on-surface-variant text-sm mt-3">For serious creators who need unlimited creative freedom and full control.</p>
+                    </div>
+                    <div class="space-y-0 mb-8 flex-grow">
+                        <div class="feature-item"><span class="material-symbols-outlined check text-sm">check_circle</span><span><strong class="text-on-surface">Unlimited</strong> generations</span></div>
+                        <div class="feature-item"><span class="material-symbols-outlined check text-sm">check_circle</span><span>High-precision LSTM-v2</span></div>
+                        <div class="feature-item"><span class="material-symbols-outlined check text-sm">check_circle</span><span>Temperature (0.1 → 2.0)</span></div>
+                        <div class="feature-item"><span class="material-symbols-outlined check text-sm">check_circle</span><span>Cloud save (100 verses)</span></div>
+                        <div class="feature-item muted"><span class="material-symbols-outlined check text-sm">cancel</span><span>Fine-tuning</span></div>
+                        <div class="feature-item muted"><span class="material-symbols-outlined check text-sm">cancel</span><span>API access</span></div>
+                    </div>
+                    <a href="/register" class="btn-plan filled block text-center">Start with Folklore</a>
+                </div>
+
+                <!-- Era Studio -->
+                <div class="plan-card">
+                    <div class="mb-6">
+                        <div class="text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-on-surface-variant mb-3">Era Studio</div>
+                        <div class="plan-price">
+                            <span class="monthly-price">$39</span>
+                            <span class="annual-price hidden">$30</span>
+                            <span class="plan-period">/ month</span>
+                        </div>
+                        <p class="text-on-surface-variant text-sm mt-3">For professionals, studios and teams who want to build on top of our music AI.</p>
+                    </div>
+                    <div class="space-y-0 mb-8 flex-grow">
+                        <div class="feature-item"><span class="material-symbols-outlined check text-sm" style="color:#ff94a3">check_circle</span><span>All Folklore features</span></div>
+                        <div class="feature-item"><span class="material-symbols-outlined check text-sm" style="color:#ff94a3">check_circle</span><span><strong class="text-on-surface">Fine-tune</strong> on your lyrics</span></div>
+                        <div class="feature-item"><span class="material-symbols-outlined check text-sm" style="color:#ff94a3">check_circle</span><span>Commercial rights</span></div>
+                        <div class="feature-item"><span class="material-symbols-outlined check text-sm" style="color:#ff94a3">check_circle</span><span>REST API access</span></div>
+                        <div class="feature-item"><span class="material-symbols-outlined check text-sm" style="color:#ff94a3">check_circle</span><span>Priority GPU queue</span></div>
+                        <div class="feature-item"><span class="material-symbols-outlined check text-sm" style="color:#ff94a3">check_circle</span><span>Dedicated support</span></div>
+                    </div>
+                    <a href="/register" class="btn-plan outline block text-center">Enter the Studio</a>
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div class="max-w-2xl mx-auto">
+                <h2 class="font-['Space_Grotesk'] text-2xl font-bold mb-8 text-center">Frequently asked</h2>
+                <div class="faq-row">
+                    <div class="faq-q" onclick="toggleFaq(this)">Why 13 generations on the free plan? <span class="material-symbols-outlined text-on-surface-variant text-base">expand_more</span></div>
+                    <div class="faq-a">Taylor Swift's favorite number is 13. It's a small homage embedded in our pricing — every Debut user gets exactly 13 AI generations per day.</div>
+                </div>
+                <div class="faq-row">
+                    <div class="faq-q" onclick="toggleFaq(this)">Can I cancel at any time? <span class="material-symbols-outlined text-on-surface-variant text-base">expand_more</span></div>
+                    <div class="faq-a">Absolutely. No contracts, no lock-ins. Cancel from your account settings and you retain access until the end of your billing period.</div>
+                </div>
+                <div class="faq-row">
+                    <div class="faq-q" onclick="toggleFaq(this)">What does "fine-tuning" mean? <span class="material-symbols-outlined text-on-surface-variant text-base">expand_more</span></div>
+                    <div class="faq-a">Era Studio users can upload their own lyrics corpus to retrain a personalized LSTM layer on top of the base model, giving the AI your unique artistic voice.</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="relative z-10 py-8 border-t border-white/5 text-center text-on-surface-variant text-xs">
+        © 2026 Lyricist AI · <a href="/technology" class="hover:text-secondary transition-colors">Technology</a> · <a href="/process" class="hover:text-primary transition-colors">Process</a>
+    </footer>
+
+    <script>
+        function setToggle(mode) {
+            const monthly = document.querySelectorAll('.monthly-price');
+            const annual = document.querySelectorAll('.annual-price');
+            const btnM = document.getElementById('btn-monthly');
+            const btnA = document.getElementById('btn-annual');
+            if (mode === 'monthly') {
+                monthly.forEach(e => e.classList.remove('hidden'));
+                annual.forEach(e => e.classList.add('hidden'));
+                btnM.style.cssText = 'background:linear-gradient(135deg,#6807ba,#bd82ff);color:#fff';
+                btnA.style.cssText = 'color:#a7abb7;background:transparent';
+            } else {
+                monthly.forEach(e => e.classList.add('hidden'));
+                annual.forEach(e => e.classList.remove('hidden'));
+                btnA.style.cssText = 'background:linear-gradient(135deg,#6807ba,#bd82ff);color:#fff';
+                btnM.style.cssText = 'color:#a7abb7;background:transparent';
+            }
+        }
+        function toggleFaq(el) {
+            const ans = el.nextElementSibling;
+            const icon = el.querySelector('.material-symbols-outlined');
+            const visible = ans.style.display === 'block';
+            ans.style.display = visible ? 'none' : 'block';
+            icon.textContent = visible ? 'expand_more' : 'expand_less';
+        }
+    </script>
+</body>
+</html>
