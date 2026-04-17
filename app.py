@@ -3,9 +3,7 @@ import os
 import pymysql
 import numpy as np
 import pickle
-import tensorflow as tf
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing.sequence import pad_sequences
+import onnxruntime as ort
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 
@@ -22,9 +20,24 @@ def get_db_connection():
         database=os.environ.get('MYSQL_DB', 'taylor_db')
     )
 
-# Charger le modèle LSTM
-print("Chargement du modèle LSTM...")
-model = load_model('taylor_swift_lstm.keras')
+# Charger le modèle ONNX
+print("Chargement du modèle ONNX...")
+onnx_session = ort.InferenceSession('taylor_swift_lstm.onnx')
+onnx_input_name = onnx_session.get_inputs()[0].name
+
+def pad_sequences(sequences, maxlen, padding='pre'):
+    """Numpy fallback since standard Keras pad_sequences is excluded"""
+    padded_seqs = []
+    for seq in sequences:
+        if len(seq) > maxlen:
+            if padding == 'pre': seq = seq[-maxlen:]
+            else: seq = seq[:maxlen]
+        elif len(seq) < maxlen:
+            pad_len = maxlen - len(seq)
+            if padding == 'pre': seq = [0] * pad_len + seq
+            else: seq = seq + [0] * pad_len
+        padded_seqs.append(seq)
+    return np.array(padded_seqs, dtype=np.float32)
 with open('tokenizer.pkl', 'rb') as f:
     tokenizer = pickle.load(f)
 
@@ -52,7 +65,7 @@ def generate_lyrics(seed_text, next_words=30, temperature=0.8):
             padding='pre'
         )
 
-        predictions = model.predict(token_list, verbose=0)[0]
+        predictions = onnx_session.run(None, {onnx_input_name: token_list})[0][0]
         predictions = np.log(predictions + 1e-10) / temperature
         predictions = np.exp(predictions) / np.sum(np.exp(predictions))
 
