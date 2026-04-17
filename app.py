@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, flash
-from flask_mysqldb import MySQL
+import os
+import pymysql
 import numpy as np
 import pickle
 import tensorflow as tf
@@ -11,14 +12,15 @@ from functools import wraps
 app = Flask(__name__)
 app.secret_key = 'taylor_secret_key_13'
 
-# Configuration MySQL
-app.config['MYSQL_HOST'] = '127.0.0.1'
-app.config['MYSQL_PORT'] = 3307
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '' 
-app.config['MYSQL_DB'] = 'taylor_db'
-
-mysql = MySQL(app)
+# Configuration MySQL will be overridden by Environment variables in Serverless deployment
+def get_db_connection():
+    return pymysql.connect(
+        host=os.environ.get('MYSQL_HOST', '127.0.0.1'),
+        port=int(os.environ.get('MYSQL_PORT', 3307)),
+        user=os.environ.get('MYSQL_USER', 'root'),
+        password=os.environ.get('MYSQL_PASSWORD', ''),
+        database=os.environ.get('MYSQL_DB', 'taylor_db')
+    )
 
 # Charger le modèle LSTM
 print("Chargement du modèle LSTM...")
@@ -90,17 +92,20 @@ def register():
         password = request.form['password']
         hashed_pw = generate_password_hash(password)
 
-        cur = mysql.connection.cursor()
+        conn = get_db_connection()
+        cur = conn.cursor()
         try:
             cur.execute("INSERT INTO users(username, email, password) VALUES(%s, %s, %s)", 
                         (username, email, hashed_pw))
-            mysql.connection.commit()
+            conn.commit()
             flash("Compte créé avec succès ! Connectez-vous.", "success")
             return redirect(url_for('login'))
         except Exception as e:
+            print("DB Insert Error:", e)
             flash("Erreur lors de l'inscription.", "error")
         finally:
             cur.close()
+            conn.close()
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -109,10 +114,12 @@ def login():
         email = request.form['email']
         password = request.form['password']
 
-        cur = mysql.connection.cursor()
+        conn = get_db_connection()
+        cur = conn.cursor()
         cur.execute("SELECT id, username, password FROM users WHERE email = %s", [email])
         user = cur.fetchone()
         cur.close()
+        conn.close()
 
         if user and check_password_hash(user[2], password):
             session['user_id'] = user[0]
