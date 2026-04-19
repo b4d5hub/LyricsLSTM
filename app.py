@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, jsonify, session, redirect, u
 import os
 import pymysql
 import numpy as np
-import pickle
+import json
 import onnxruntime as ort
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
@@ -20,9 +20,11 @@ def get_db_connection():
         database=os.environ.get('MYSQL_DB', 'taylor_db')
     )
 
-# Charger le modèle ONNX
+# Charger le modèle ONNX en absolu (Sécurité Serverless)
 print("Chargement du modèle ONNX...")
-onnx_session = ort.InferenceSession('taylor_swift_lstm.onnx')
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+onnx_path = os.path.join(BASE_DIR, 'taylor_swift_lstm.onnx')
+onnx_session = ort.InferenceSession(onnx_path)
 onnx_input_name = onnx_session.get_inputs()[0].name
 
 def pad_sequences(sequences, maxlen, padding='pre'):
@@ -38,8 +40,27 @@ def pad_sequences(sequences, maxlen, padding='pre'):
             else: seq = seq + [0] * pad_len
         padded_seqs.append(seq)
     return np.array(padded_seqs, dtype=np.float32)
-with open('tokenizer.pkl', 'rb') as f:
-    tokenizer = pickle.load(f)
+tokenizer_path = os.path.join(BASE_DIR, 'tokenizer_word_index.json')
+with open(tokenizer_path, 'r', encoding='utf-8') as f:
+    word_index = json.load(f)
+index_word_dict = {int(v): k for k, v in word_index.items()}
+
+class SimpleTokenizer:
+    def __init__(self, w_index, i_word):
+        self.word_index = w_index
+        self.index_word = i_word
+        
+    def texts_to_sequences(self, texts):
+        filters = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n'
+        trans = str.maketrans(filters, ' '*len(filters))
+        sequences = []
+        for text in texts:
+            text = text.translate(trans).lower()
+            seq = [self.word_index[w] for w in text.split() if w in self.word_index]
+            sequences.append(seq)
+        return sequences
+
+tokenizer = SimpleTokenizer(word_index, index_word_dict)
 
 SEQ_LENGTH = 20
 print("✅ Système prêt !")
