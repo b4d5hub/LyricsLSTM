@@ -1,24 +1,18 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, flash
 import os
-import pymysql
+from supabase import create_client, Client
 import numpy as np
 import json
 import onnxruntime as ort
-from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 
 app = Flask(__name__)
 app.secret_key = 'taylor_secret_key_13'
 
-# Configuration MySQL will be overridden by Environment variables in Serverless deployment
-def get_db_connection():
-    return pymysql.connect(
-        host=os.environ.get('MYSQL_HOST', '127.0.0.1'),
-        port=int(os.environ.get('MYSQL_PORT', 3307)),
-        user=os.environ.get('MYSQL_USER', 'root'),
-        password=os.environ.get('MYSQL_PASSWORD', ''),
-        database=os.environ.get('MYSQL_DB', 'taylor_db')
-    )
+# Configuration Supabase Auth
+SUPABASE_URL = os.environ.get('SUPABASE_URL', 'https://xbzcghmieuwrxqosyszf.supabase.co')
+SUPABASE_KEY = os.environ.get('SUPABASE_KEY', 'sb_publishable_uSeo4lMuHqjE8RAJCaJxyg_BiHt3AUu')
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # Charger le modèle ONNX en absolu (Sécurité Serverless)
 print("Chargement du modèle ONNX...")
@@ -121,46 +115,50 @@ def pricing():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = request.form['username']
-        email = request.form['email']
-        password = request.form['password']
-        hashed_pw = generate_password_hash(password)
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
 
-        conn = get_db_connection()
-        cur = conn.cursor()
         try:
-            cur.execute("INSERT INTO users(username, email, password) VALUES(%s, %s, %s)", 
-                        (username, email, hashed_pw))
-            conn.commit()
-            flash("Compte créé avec succès ! Connectez-vous.", "success")
+            response = supabase.auth.sign_up({
+                "email": email,
+                "password": password,
+                "options": {
+                    "data": {"username": username}
+                }
+            })
+            
+            flash("Compte créé avec succès ! Veuillez vérifier votre email ou connectez-vous.", "success")
             return redirect(url_for('login'))
         except Exception as e:
-            print("DB Insert Error:", e)
-            flash("Erreur lors de l'inscription.", "error")
-        finally:
-            cur.close()
-            conn.close()
+            print("Supabase Signup Error:", e)
+            flash("Erreur lors de l'inscription. (Le compte existe peut-être déjà ou le mot de passe est trop faible)", "error")
+            
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
+        email = request.form.get('email')
+        password = request.form.get('password')
 
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute("SELECT id, username, password FROM users WHERE email = %s", [email])
-        user = cur.fetchone()
-        cur.close()
-        conn.close()
-
-        if user and check_password_hash(user[2], password):
-            session['user_id'] = user[0]
-            session['username'] = user[1]
-            return redirect(url_for('generator'))
-        else:
+        try:
+            response = supabase.auth.sign_in_with_password({
+                "email": email,
+                "password": password
+            })
+            
+            if response.user:
+                session['user_id'] = response.user.id
+                user_meta = response.user.user_metadata or {}
+                session['username'] = user_meta.get('username', email)
+                return redirect(url_for('generator'))
+            else:
+                flash("Email ou mot de passe incorrect.", "error")
+        except Exception as e:
+            print("Supabase Login Error:", e)
             flash("Email ou mot de passe incorrect.", "error")
+            
     return render_template('login.html')
 
 @app.route('/logout')

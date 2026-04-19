@@ -1,5 +1,5 @@
 flask
-PyMySQL
+supabase
 numpy
 onnxruntime
 werkzeug
